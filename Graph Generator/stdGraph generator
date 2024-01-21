@@ -1,0 +1,36 @@
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Read the CSV file
+csv_file_path = 'survey_data.csv'
+df = pd.read_csv(csv_file_path)
+
+# Mapping for 'Fuel Consumption'
+fuel_consumption_mapping = {'Public transport': 1, 'Carpooling': 3, 'Eco-friendly vehicle': 2, 'Personal vehicle': 4}
+
+# Mapping for 'Water Usage'
+water_usage_mapping = {'<75': 1, '125': 2, '175': 3, '225': 4, '>275': 5}
+
+# Mapping for 'Plastic Usage'
+plastic_usage_mapping = {'Never': 1, 'Rarely': 2, 'Occasionally': 3, 'Frequently': 4, 'Always': 5}
+
+# Process data and calculate averages
+avg_electronic_waste = df['Electronic Wastage (hrs/day)'].apply(lambda x: 1 + int(x // 5)).mean()
+avg_fuel_consumption = df['Fuel Consumption (habits)'].map(fuel_consumption_mapping).mean()
+avg_water_usage = df['Water Usage (estimation)'].astype(str).map(water_usage_mapping).mean()
+avg_plastic_usage = df['Plastic Reduction (efforts)'].map(plastic_usage_mapping).mean()
+
+# Plot the data
+plt.figure(figsize=(8, 6))
+plt.plot(['Electronic Waste', 'Fuel Consumption', 'Water Usage', 'Plastic Usage'],
+         [avg_electronic_waste, avg_fuel_consumption, avg_water_usage, avg_plastic_usage],
+         marker='o', linestyle='-', color='b')
+
+# Customize the plot
+plt.title('Sustainability Averages')
+plt.ylabel('Average Sustainability Rating')
+plt.yticks(range(1, 6), ['1 (Best)', '2', '3', '4', '5 (Worst)'])
+
+# Show the plot
+plt.show()
